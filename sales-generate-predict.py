@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import seaborn as sns
-from sklearn.naive_bayes import GaussianNB
 
 st.write("# Sales Prediction App")
 st.write("This app predicts the **Sales based on Advertising type!**")
@@ -24,23 +23,10 @@ df = user_input_features()
 st.subheader('User Input parameters')
 st.write(df)
 
-data = sns.load_dataset('Sales')
-X = data.drop(['Sales'],axis=1)
-Y = data.Sales.copy()
-#X=df_scaled.drop('Sales', axis=1)
-#y=df_scaled.Sales.copy()
+loaded_model = pickle.load(open("AdvertisingModel.h5", "rb")) #rb: read binary
+new_pred = loaded_model.predict(df) # testing (examination)
 
-modelGaussianIris = GaussianNB()
-modelGaussianIris.fit(X, Y)
-
-prediction = modelGaussianIris.predict(df)
-prediction_proba = modelGaussianIris.predict_proba(df)
-
-st.subheader('Sales for each Advertising type')
-st.write(Y.unique())
 
 st.subheader('Prediction')
-st.write(prediction)
+st.write(new_pred)
 
-st.subheader('Prediction Probability')
-st.write(prediction_proba)
